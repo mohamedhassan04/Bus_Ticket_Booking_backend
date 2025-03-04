@@ -19,14 +19,14 @@ The **Online Bus Ticket Booking System** is a backend service built with **NestJ
 
 ## 🏷️ Tech Stack
 
-| Technology  | Description                                  |
-| ----------- | -------------------------------------------- |
-| **NestJS**  | Backend framework for building scalable APIs |
-| **TypeORM** | ORM for database interactions                |
-| **MySQL**   | Relational database for data storage         |
-| **JWT**     | Authentication and security                  |
-| **Docker**  | Containerized deployment                     |
-| **Swagger** | API documentation                            |
+| Technology     | Description                                  |
+| -------------- | -------------------------------------------- |
+| **NestJS**     | Backend framework for building scalable APIs |
+| **TypeORM**    | ORM for database interactions                |
+| **Postgresql** | Relational database for data storage         |
+| **JWT**        | Authentication and security                  |
+| **Docker**     | Containerized deployment                     |
+| **Swagger**    | API documentation                            |
 
 ---
 
@@ -35,14 +35,14 @@ The **Online Bus Ticket Booking System** is a backend service built with **NestJ
 ```
 📦 bus-ticket-booking
  ├ 💚 src
- ├ ├ 💚 auth
- ├ ├ 💚 users
- ├ ├ 💚 buses
- ├ ├ 💚 routes
- ├ ├ 💚 schedules
- ├ ├ 💚 bookings
- ├ ├ 💚 payments
- ├ ├ 💚 reviews
+ ├ ├ 💚 config
+ ├ ├ 💚 exceptions
+ ├ ├ 💚 modules
+ ├ ├ 💚 shared
+      ├ 💚logger
+      ├ 💚node
+      ├ 💚send-mail
+      ├ 💚swagger
  ├ ├ 💚 main.ts
  ├ ├ 💚 app.module.ts
  ├ 💚 .env
