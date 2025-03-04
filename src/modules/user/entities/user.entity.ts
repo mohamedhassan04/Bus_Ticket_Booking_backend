@@ -4,14 +4,21 @@ import { Column, Entity } from 'typeorm';
 @Entity()
 export class User extends Node {
   @Column({ type: 'varchar', length: 40 })
-  firstName: string;
-
-  @Column({ type: 'varchar', length: 40 })
-  lastName: string;
+  username: string;
 
   @Column({ type: 'varchar', length: 40, unique: true })
   email: string;
 
   @Column({ type: 'varchar' })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: ['admin', 'user', 'operator'],
+    default: 'user',
+  })
+  role: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
 }

@@ -33,7 +33,7 @@ export class AuthenticationService {
     return {
       status: 200,
       success: {
-        name: user.firstName + ' ' + user.lastName,
+        name: user.username,
         token: this.jwtService.sign(payload),
       },
     };
