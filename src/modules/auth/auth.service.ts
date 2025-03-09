@@ -28,6 +28,7 @@ export class AuthenticationService {
       sub: {
         id: user.id,
         email: loginUserDto.email,
+        role: user?.role,
       },
     };
     return {

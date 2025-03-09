@@ -51,7 +51,6 @@ export class AuthenticationController {
   ) {
     try {
       const loginResult = await this.authService.login(req.user, loginUserDto);
-
       // Set the httpOnly cookie for 4 hours
       res.cookie('token', loginResult.success.token, {
         httpOnly: true,

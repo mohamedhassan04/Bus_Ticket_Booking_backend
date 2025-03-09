@@ -35,6 +35,7 @@ export class AuthenticationModule implements NestModule {
         { path: 'auth/register', method: RequestMethod.POST },
         { path: 'user/users', method: RequestMethod.GET },
         { path: 'user/:id', method: RequestMethod.DELETE },
+        { path: 'route/all', method: RequestMethod.GET },
       ) // Exclude specific paths or methods
       .forRoutes('*'); // Apply to all routes
   }

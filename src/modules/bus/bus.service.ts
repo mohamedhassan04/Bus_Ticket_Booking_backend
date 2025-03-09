@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBusDto } from './dto/create-bus.dto';
 import { UpdateBusDto } from './dto/update-bus.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Bus } from './entities/bus.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BusService {
-  create(createBusDto: CreateBusDto) {
-    return 'This action adds a new bus';
+  constructor(
+    @InjectRepository(Bus) private readonly _busRepo: Repository<Bus>,
+  ) {}
+  async create(createBusDto: CreateBusDto) {
+    return await this._busRepo.save(createBusDto);
   }
 
-  findAll() {
-    return `This action returns all bus`;
+  async findAll() {
+    return await this._busRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bus`;
+  async update(id: string, updateBusDto: UpdateBusDto) {
+    return await this._busRepo.update(id, updateBusDto);
   }
 
-  update(id: number, updateBusDto: UpdateBusDto) {
-    return `This action updates a #${id} bus`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} bus`;
+  async remove(id: string) {
+    return await this._busRepo.delete(id);
   }
 }

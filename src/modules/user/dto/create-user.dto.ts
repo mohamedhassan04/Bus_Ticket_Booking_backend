@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsString,
   Matches,
@@ -16,18 +17,9 @@ export class CreateUserDto {
     example: 'user',
   })
   @IsString()
-  @MinLength(2, { message: 'firstName must have atleast 2 characters.' })
+  @MinLength(2, { message: 'username must have atleast 2 characters.' })
   @IsNotEmpty()
-  firstName: string;
-
-  @ApiProperty({
-    type: 'string',
-    example: 'user',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3, { message: 'lastName must have atleast 3 characters.' })
-  lastName: string;
+  username: string;
 
   @ApiProperty({
     type: 'string',
@@ -52,4 +44,21 @@ export class CreateUserDto {
     one special character`,
   })
   password: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: 'user@example.com',
+  })
+  @IsNotEmpty()
+  @IsEnum(['admin', 'user', 'operator'], {
+    message: 'Please provide a valid role.',
+  })
+  role: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: '+216000000',
+  })
+  @IsNotEmpty()
+  phoneNumber: string;
 }

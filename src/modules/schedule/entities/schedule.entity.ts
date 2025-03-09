@@ -1,7 +1,7 @@
 import { Bus } from 'src/modules/bus/entities/bus.entity';
 import { Route } from 'src/modules/route/entities/route.entity';
 import { Node } from 'src/shared/node/common.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Schedule extends Node {
@@ -13,12 +13,18 @@ export class Schedule extends Node {
   @JoinColumn()
   route: Route;
 
-  @Column()
-  departureTime: Date;
+  @Column({ type: 'date' })
+  departureDate: string;
 
-  @Column()
-  arrivalTime: Date;
+  @Column({ type: 'time' })
+  departureTime: string;
+
+  @Column({ type: 'date' })
+  arrivalDate: string;
+
+  @Column({ type: 'time' })
+  arrivalTime: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  fare: number; // Ticket price
+  fare: number;
 }

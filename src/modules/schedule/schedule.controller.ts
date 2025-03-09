@@ -3,45 +3,65 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  HttpStatus,
+  UseGuards,
+  UseFilters,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from 'src/shared/decorators/roles.decorator';
+import { AuthExceptionFilter } from 'src/exceptions/FilterException';
 
 @ApiTags('Schedule')
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 
-  @Post()
-  create(@Body() createScheduleDto: CreateScheduleDto) {
-    return this.scheduleService.create(createScheduleDto);
+  //@Method POST
+  //@desc Create Schedule
+  //@Path: /create
+  @ApiOperation({ summary: 'Create Schedule' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Success Create Schedule.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Error Create Schedule.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Authentication required.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Insufficient permissions.',
+  })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @UseFilters(AuthExceptionFilter)
+  @Post('/create')
+  async create(@Body() createScheduleDto: CreateScheduleDto) {
+    return await this.scheduleService.create(createScheduleDto);
   }
 
-  @Get()
-  findAll() {
-    return this.scheduleService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.scheduleService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateScheduleDto: UpdateScheduleDto,
-  ) {
-    return this.scheduleService.update(+id, updateScheduleDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.scheduleService.remove(+id);
+  //@Method GET
+  //@desc Get all Schedule
+  //@Path: /all
+  @ApiOperation({ summary: 'Get all Schedule' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success Get all Schedule.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Error Get all Schedule.',
+  })
+  @Get('/all')
+  async findAll() {
+    return await this.scheduleService.findAll();
   }
 }
