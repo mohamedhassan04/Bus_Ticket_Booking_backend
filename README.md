@@ -98,7 +98,7 @@ npm run start:dev
 Once the server is running, access **Swagger API Docs** at:
 
 ```
-http://localhost:3000/api
+http://localhost:5000/docs/v1#/
 ```
 
 ---
@@ -107,28 +107,30 @@ http://localhost:3000/api
 
 ### **Authentication**
 
-| Method | Endpoint         | Description             | Access |
-| ------ | ---------------- | ----------------------- | ------ |
-| POST   | `/auth/register` | User Registration       | Public |
-| POST   | `/auth/login`    | User Login              | Public |
-| GET    | `/auth/profile`  | Get Logged-in User Info | User   |
+| Method | Endpoint            | Description             | Access |
+| ------ | ------------------- | ----------------------- | ------ |
+| POST   | `/auth/register`    | User Registration       | Public |
+| POST   | `/auth/login`       | User Login              | Public |
+| POST   | `/auth/logout`      | User logout             | User   |
+| GET    | `/api/auth/current` | Get Logged-in User Info | User   |
 
 ### **Bus Management (Admin)**
 
 | Method | Endpoint     | Description        | Access |
 | ------ | ------------ | ------------------ | ------ |
-| POST   | `/buses`     | Add a new bus      | Admin  |
-| GET    | `/buses`     | List all buses     | Admin  |
-| PUT    | `/buses/:id` | Update bus details | Admin  |
-| DELETE | `/buses/:id` | Delete a bus       | Admin  |
+| POST   | `bus/create` | Add a new bus      | Admin  |
+| GET    | `bus/all`    | List all buses     | Admin  |
+| PUT    | `bus/:id`    | Update bus details | Admin  |
+| DELETE | `/bus/:id`   | Delete a bus       | Admin  |
 
 ### **Route & Schedule**
 
-| Method | Endpoint     | Description       | Access |
-| ------ | ------------ | ----------------- | ------ |
-| GET    | `/routes`    | Get all routes    | Public |
-| GET    | `/schedules` | Get all schedules | Public |
-| POST   | `/schedules` | Add new schedule  | Admin  |
+| Method | Endpoint           | Description       | Access |
+| ------ | ------------------ | ----------------- | ------ |
+| GET    | `route/create`     | Add new route     | Admin  |
+| GET    | `/schedule/all`    | Get all schedules | Public |
+| POST   | `/route/all`       | Get all routes    | Admin  |
+| POST   | `/schedule/create` | Add new schedule  | Admin  |
 
 ### **Booking & Payment**
 
@@ -140,10 +142,11 @@ http://localhost:3000/api
 
 ### **Reviews & Ratings**
 
-| Method | Endpoint       | Description         | Access |
-| ------ | -------------- | ------------------- | ------ |
-| POST   | `/reviews`     | Submit a bus review | User   |
-| GET    | `/reviews/:id` | Get bus reviews     | Public |
+| Method | Endpoint         | Description         | Access |
+| ------ | ---------------- | ------------------- | ------ |
+| POST   | `/review/create` | Submit a bus review | User   |
+| GET    | `/review/all`    | Get bus reviews     | Public |
+| DELETE | `/review/:id`    | Delete review       | User   |
 
 ---
 
