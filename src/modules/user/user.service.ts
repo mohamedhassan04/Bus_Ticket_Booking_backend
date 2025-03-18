@@ -1,14 +1,22 @@
-import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
+import { v4 as uuidv4 } from 'uuid';
+import { EmailService } from 'src/shared/send-mail/mail.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly _userRepo: Repository<User>,
+    private readonly emailService: EmailService,
   ) {}
   async register(createUserDto: CreateUserDto) {
     try {
@@ -29,7 +37,16 @@ export class UserService {
 
       // Save user
       hash && (user.password = hash);
+
+      user.confirmationToken = uuidv4();
       await this._userRepo.save(user);
+
+      const confirmationLink = `${process.env.FRONTEND_PATH}confirm-account?token=${user.confirmationToken}`;
+      // Send confirmation email
+      await this.emailService.sendEmailConfirmAccount(
+        user.email,
+        confirmationLink,
+      );
 
       //For not return the password in the response
       const { password, ...result } = user;
@@ -65,5 +82,54 @@ export class UserService {
     return await this._userRepo.findOne({
       where: { id: id },
     });
+  }
+
+  async confirmAccount(token: string) {
+    const user = await this._userRepo.findOne({
+      where: { confirmationToken: token },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid or expired token');
+    }
+
+    user.isConfirmed = true;
+    user.confirmationToken = null;
+    await this._userRepo.save(user);
+
+    return { message: 'Account confirmed successfully' };
+  }
+
+  async sendEmailResetPassword(email: string) {
+    const user = await this._userRepo.findOne({
+      where: { email: email },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    user.resetPwdToken = uuidv4();
+    await this._userRepo.save(user);
+    const resetLink = `${process.env.FRONTEND_PATH}reset-password?token=${user.resetPwdToken}`;
+    await this.emailService.sendEmailResetPassword(user.email, resetLink);
+
+    return { message: 'Email sent successfully' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const user = await this._userRepo.findOne({
+      where: { resetPwdToken: token },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPwdToken = null;
+    await this._userRepo.save(user);
+
+    return { message: 'Password reset successfully' };
   }
 }

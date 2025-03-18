@@ -21,4 +21,13 @@ export class User extends Node {
 
   @Column({ nullable: true })
   phoneNumber: string;
+
+  @Column({ nullable: true })
+  confirmationToken: string | null;
+
+  @Column({ nullable: true })
+  resetPwdToken: string | null;
+
+  @Column({ default: false })
+  isConfirmed: boolean;
 }

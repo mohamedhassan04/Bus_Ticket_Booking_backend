@@ -1,5 +1,6 @@
 // Import the TypeOrmModuleOptions from the NestJS TypeORM module
 // import { MailerModule } from '@nestjs-modules/mailer';
+import { MailerModule } from '@nestjs-modules/mailer';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ISwaggerConfigInterface } from 'src/shared/swagger/swagger-config.interface';
 
@@ -85,29 +86,29 @@ class ConfigService {
     };
   }
 
-  //   public smtpEmailConfig(): MailerModule {
-  //     return {
-  //       transport: {
-  //         host: this.getValue('MAIL_HOST'),
-  //         port: parseInt(this.getValue('MAIL_SMTP_PORT')) || 465,
-  //         secure: false,
-  //         auth: {
-  //           user: this.getValue('MAIL_USER'),
-  //           pass: this.getValue('MAIL_PASS'),
-  //         },
-  //         tls: {
-  //           rejectUnauthorized: false,
-  //         },
-  //       },
-  //       defaults: {
-  //         from: this.getValue('DEFAULT_MAIL_FROM'),
-  //       },
-  //       options: {
-  //         logger: true,
-  //         debug: true,
-  //       },
-  //     };
-  //   }
+  public smtpEmailConfig(): MailerModule {
+    return {
+      transport: {
+        host: this.getValue('MAIL_HOST'),
+        port: parseInt(this.getValue('MAIL_SMTP_PORT')) || 465,
+        secure: false,
+        auth: {
+          user: this.getValue('MAIL_USER'),
+          pass: this.getValue('MAIL_PASS'),
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      },
+      defaults: {
+        from: this.getValue('DEFAULT_MAIL_FROM'),
+      },
+      options: {
+        logger: true,
+        debug: true,
+      },
+    };
+  }
 }
 
 // Create an instance of ConfigService using environment variables and ensure required keys are present
@@ -119,13 +120,13 @@ const configService = new ConfigService(process.env).ensureValues([
   'POSTGRES_DATABASE',
 ]);
 
-// const configServiceMail = new ConfigService(process.env).ensureValues([
-//   'MAIL_HOST',
-//   'MAIL_USER',
-//   'MAIL_PASS',
-//   'MAIL_SMTP_PORT',
-//   'DEFAULT_MAIL_FROM',
-// ]);
+const configServiceMail = new ConfigService(process.env).ensureValues([
+  'MAIL_HOST',
+  'MAIL_USER',
+  'MAIL_PASS',
+  'MAIL_SMTP_PORT',
+  'DEFAULT_MAIL_FROM',
+]);
 
 // Export the instance of ConfigService
-export { configService };
+export { configService, configServiceMail };

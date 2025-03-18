@@ -13,6 +13,7 @@ import { LocalStrategy } from './strategies/local-strategy';
 import { JwtStrategy } from './strategies/jwt-strategy';
 import { AuthenticationController } from './auth.controller';
 import { AuthMiddleware } from 'src/exceptions/Auth-middelware';
+import { EmailService } from 'src/shared/send-mail/mail.service';
 
 /* If we import JwtModule, we don't need to import JwtService */
 @Module({
@@ -23,7 +24,13 @@ import { AuthMiddleware } from 'src/exceptions/Auth-middelware';
       signOptions: { expiresIn: '4h' },
     }),
   ],
-  providers: [AuthenticationService, UserService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthenticationService,
+    UserService,
+    LocalStrategy,
+    JwtStrategy,
+    EmailService,
+  ],
   controllers: [AuthenticationController],
 })
 export class AuthenticationModule implements NestModule {
@@ -35,6 +42,9 @@ export class AuthenticationModule implements NestModule {
         { path: 'auth/register', method: RequestMethod.POST },
         { path: 'user/users', method: RequestMethod.GET },
         { path: 'user/:id', method: RequestMethod.DELETE },
+        { path: 'user/confirm-account', method: RequestMethod.PATCH },
+        { path: 'user/reset-password', method: RequestMethod.POST },
+        { path: 'user/send-reset', method: RequestMethod.POST },
         { path: 'route/all', method: RequestMethod.GET },
         { path: 'review/all', method: RequestMethod.GET },
       ) // Exclude specific paths or methods
