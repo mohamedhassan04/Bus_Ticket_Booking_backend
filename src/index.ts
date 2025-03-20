@@ -7,6 +7,7 @@ import { RouteModule } from './modules/route/route.module';
 import { ScheduleModule } from './modules/schedule/schedule.module';
 import { TicketModule } from './modules/ticket/ticket.module';
 import { UserModule } from './modules/user/user.module';
+import { CronModule } from './shared/cron/cron.module';
 
 export const AllModules = [
   UserModule,
@@ -18,4 +19,5 @@ export const AllModules = [
   ReviewModule,
   PaymentModule,
   TicketModule,
+  CronModule,
 ];

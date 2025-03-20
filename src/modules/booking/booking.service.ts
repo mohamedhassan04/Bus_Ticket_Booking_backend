@@ -5,13 +5,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './entities/booking.entity';
 import { Ticket } from '../ticket/entities/ticket.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { Schedule } from '../schedule/entities/schedule.entity';
+import * as moment from 'moment';
+import { CronService } from 'src/shared/cron/cron.service';
 
 @Injectable()
 export class BookingService {
@@ -27,6 +28,8 @@ export class BookingService {
 
     @InjectRepository(Schedule)
     private readonly _scheduleRepository: Repository<Schedule>,
+
+    private readonly _cronService: CronService,
   ) {}
 
   async createBooking(
@@ -75,17 +78,5 @@ export class BookingService {
       .where('booking.userId = :userId', { userId: user.id })
       .orderBy('booking.createdAt', 'DESC')
       .getMany();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} booking`;
-  }
-
-  update(id: number, updateBookingDto: UpdateBookingDto) {
-    return `This action updates a #${id} booking`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
   }
 }

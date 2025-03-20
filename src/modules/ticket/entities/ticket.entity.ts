@@ -17,6 +17,9 @@ export class Ticket extends Node {
   @Column({ type: 'varchar', length: 255 })
   passengerName: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  passengerEmail: string;
+
   @Column({ type: 'text', nullable: true })
   qrCode: string;
 
