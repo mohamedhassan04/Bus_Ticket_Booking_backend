@@ -43,7 +43,7 @@ export class CronService {
     }
 
     upcomingBookings.forEach(async (email: string) => {
-      await this.emailService.sendEmailConfirmAccount(email, '');
+      // await this.emailService.sendEmailConfirmAccount(email, '');
     });
   }
 }

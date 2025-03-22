@@ -8,11 +8,10 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './entities/booking.entity';
 import { Ticket } from '../ticket/entities/ticket.entity';
-import { Between, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { Schedule } from '../schedule/entities/schedule.entity';
-import * as moment from 'moment';
-import { CronService } from 'src/shared/cron/cron.service';
+import { EmailService } from 'src/shared/send-mail/mail.service';
 
 @Injectable()
 export class BookingService {
@@ -23,13 +22,10 @@ export class BookingService {
     @InjectRepository(Ticket)
     private readonly _ticketRepository: Repository<Ticket>,
 
-    @InjectRepository(User)
-    private readonly _userRepository: Repository<User>,
-
     @InjectRepository(Schedule)
     private readonly _scheduleRepository: Repository<Schedule>,
 
-    private readonly _cronService: CronService,
+    private readonly _emailService: EmailService,
   ) {}
 
   async createBooking(
@@ -41,6 +37,7 @@ export class BookingService {
     // Validate Schedule
     const schedule = await this._scheduleRepository.findOne({
       where: { id: scheduleId },
+      relations: ['route'],
     });
     if (!schedule) throw new NotFoundException('Schedule not found');
 
@@ -63,6 +60,23 @@ export class BookingService {
     });
 
     await this._ticketRepository.save(ticketEntities);
+
+    // Booked Tickets Array
+    const bookedTickets = await Promise.all(
+      tickets.map(async (ticket) => ticket.seatNumber),
+    );
+
+    // Send Email
+    await this._emailService.sendEmailConfirmBooking(
+      user.email,
+      user.username,
+      schedule?.route?.startLocation,
+      schedule?.route?.endLocation,
+      schedule?.departureDate,
+      schedule?.departureTime,
+      bookedTickets.join(', '),
+      booking?.bookingReference,
+    );
 
     throw new HttpException(
       { message: 'Booking successfully created!' },

@@ -37,6 +37,7 @@ export class Ticket extends Node {
       seatNumber: this.seatNumber,
       passengerName: this.passengerName,
       bookingId: this.booking?.id,
+      status: this.booking?.bookingReference,
     });
 
     this.qrCode = await QRCode.toDataURL(qrData);
