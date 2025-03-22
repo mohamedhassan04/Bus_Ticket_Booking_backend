@@ -9,12 +9,12 @@ export class Payment extends Node {
   booking: Booking;
 
   @Column()
-  paymentMethod: string; // Credit Card, PayPal, etc.
+  paymentMethod: string;
 
   @Column()
-  transactionId: string; // Payment gateway transaction ID
+  transactionId: string;
 
-  @Column({ default: 'pending' }) // pending, successful, failed
+  @Column({ default: 'pending' })
   status: string;
 
   @Column('decimal', { precision: 10, scale: 2 })

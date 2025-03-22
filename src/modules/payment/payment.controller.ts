@@ -17,28 +17,23 @@ import { ApiTags } from '@nestjs/swagger';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentService.create(createPaymentDto);
+  @Post('intent')
+  async createPaymentIntent(
+    @Body() body: { bookingId: string; amount: number },
+  ) {
+    return this.paymentService.createPaymentIntent(body.bookingId, body.amount);
   }
 
-  @Get()
-  findAll() {
-    return this.paymentService.findAll();
+  @Post('confirm')
+  async confirmPayment(@Body('paymentIntentId') paymentIntentId: string) {
+    const paymentIntent =
+      await this.paymentService.confirmPayment(paymentIntentId);
+
+    return paymentIntent;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.paymentService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentService.update(+id, updatePaymentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.paymentService.remove(+id);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
+  //   return this.paymentService.updatePaymentStatus(id, updatePaymentDto);
+  // }
 }
