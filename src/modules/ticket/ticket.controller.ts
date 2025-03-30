@@ -6,7 +6,7 @@ export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
   @Post('/verify')
-  async verifyTicket(@Body('qrCode') qrCode: string): Promise<string> {
+  async verifyTicket(@Body('qrCode') qrCode: any): Promise<string> {
     return this.ticketService.verifyTicket(qrCode);
   }
 }

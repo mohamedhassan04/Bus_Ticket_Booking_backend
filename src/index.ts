@@ -1,6 +1,7 @@
 import { AuthenticationModule } from './modules/auth/auth.module';
 import { BookingModule } from './modules/booking/booking.module';
 import { BusModule } from './modules/bus/bus.module';
+import { GeminiModule } from './modules/gemini/gemini.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { ReviewModule } from './modules/review/review.module';
 import { RouteModule } from './modules/route/route.module';
@@ -20,4 +21,5 @@ export const AllModules = [
   PaymentModule,
   TicketModule,
   CronModule,
+  GeminiModule,
 ];
