@@ -49,6 +49,7 @@ export class AuthenticationModule implements NestModule {
         { path: 'review/all', method: RequestMethod.GET },
         { path: 'ticket/verify', method: RequestMethod.POST },
         { path: 'gemini/generate', method: RequestMethod.GET },
+        { path: 'schedule/route-date', method: RequestMethod.GET },
       ) // Exclude specific paths or methods
       .forRoutes('*'); // Apply to all routes
   }

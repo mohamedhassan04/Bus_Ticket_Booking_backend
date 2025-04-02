@@ -1,6 +1,5 @@
 import { Body, Controller, Get } from '@nestjs/common';
 import { GeminiService } from './gemini.service';
-import { GeminiCreateDto } from './dto/gemini-create.dto';
 
 @Controller('gemini')
 export class GeminiController {
@@ -8,8 +7,8 @@ export class GeminiController {
 
   @Get('generate')
   async generateExample(
-    @Body() geminiCreateDto: GeminiCreateDto,
+    @Body('prompt') prompt: string,
   ): Promise<{ result: string }> {
-    return await this.geminiService.generateContent(geminiCreateDto);
+    return await this.geminiService.generateContent(prompt);
   }
 }

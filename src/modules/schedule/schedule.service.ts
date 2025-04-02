@@ -50,4 +50,28 @@ export class ScheduleService {
       .addSelect(['bus.busNumber', 'bus.busType', 'route.distance'])
       .getMany();
   }
+
+  async getScheduleByRouteAndDate(routeId: string, date: string) {
+    // Check if route exists
+    const route = await this._routeRepo.findOne({
+      where: { startLocation: routeId },
+    });
+    if (!route) {
+      throw new NotFoundException(`Route with ID ${routeId} not found`);
+    }
+
+    const schedule = await this._scheduleRepo.findOne({
+      where: {
+        route: { startLocation: routeId },
+        departureDate: date,
+      },
+    });
+
+    if (!schedule) {
+      throw new NotFoundException(
+        `Schedule with route ID ${routeId} and date ${date} not found`,
+      );
+    }
+    return schedule;
+  }
 }

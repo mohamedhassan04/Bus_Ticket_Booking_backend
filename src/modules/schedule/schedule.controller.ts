@@ -6,6 +6,7 @@ import {
   HttpStatus,
   UseGuards,
   UseFilters,
+  Query,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
@@ -63,5 +64,25 @@ export class ScheduleController {
   @Get('/all')
   async findAll() {
     return await this.scheduleService.findAll();
+  }
+
+  //@Method GET
+  //@desc Get all Schedule
+  //@Path: /all
+  @ApiOperation({ summary: 'Get all Schedule' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success Get all Schedule.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Error Get all Schedule.',
+  })
+  @Get('/route-date')
+  async getScheduleByRouteAndDate(
+    @Query('routeId') routeId: string,
+    @Query('date') date: string,
+  ) {
+    return await this.scheduleService.getScheduleByRouteAndDate(routeId, date);
   }
 }
